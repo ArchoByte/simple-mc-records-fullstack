@@ -17,7 +17,26 @@ namespace SimpleMcRecords.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.10");
 
-            modelBuilder.Entity("SimpleMcRecords.Models.Achievement", b =>
+            modelBuilder.Entity("SimpleMcRecords.Models.Advancement", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long?>("CategoryId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Advancements");
+                });
+
+            modelBuilder.Entity("SimpleMcRecords.Models.Category", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -26,14 +45,9 @@ namespace SimpleMcRecords.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<long?>("ParentId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("Achievements");
+                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("SimpleMcRecords.Models.Player", b =>
@@ -50,22 +64,22 @@ namespace SimpleMcRecords.Migrations
                     b.ToTable("Players");
                 });
 
-            modelBuilder.Entity("SimpleMcRecords.Models.PlayerAchievement", b =>
+            modelBuilder.Entity("SimpleMcRecords.Models.PlayerAdvancement", b =>
                 {
                     b.Property<long>("PlayerId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("AchievementId")
+                    b.Property<long>("AdvancementId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Time")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("PlayerId", "AchievementId");
+                    b.HasKey("PlayerId", "AdvancementId");
 
-                    b.HasIndex("AchievementId");
+                    b.HasIndex("AdvancementId");
 
-                    b.ToTable("PlayerAchievements");
+                    b.ToTable("PlayerAdvancements");
                 });
 
             modelBuilder.Entity("SimpleMcRecords.Models.Score", b =>
@@ -90,30 +104,30 @@ namespace SimpleMcRecords.Migrations
                     b.ToTable("Scores");
                 });
 
-            modelBuilder.Entity("SimpleMcRecords.Models.Achievement", b =>
+            modelBuilder.Entity("SimpleMcRecords.Models.Advancement", b =>
                 {
-                    b.HasOne("SimpleMcRecords.Models.Achievement", "Parent")
-                        .WithMany()
-                        .HasForeignKey("ParentId");
+                    b.HasOne("SimpleMcRecords.Models.Category", "Category")
+                        .WithMany("Advancements")
+                        .HasForeignKey("CategoryId");
 
-                    b.Navigation("Parent");
+                    b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("SimpleMcRecords.Models.PlayerAchievement", b =>
+            modelBuilder.Entity("SimpleMcRecords.Models.PlayerAdvancement", b =>
                 {
-                    b.HasOne("SimpleMcRecords.Models.Achievement", "Achievement")
-                        .WithMany("PlayerAchievements")
-                        .HasForeignKey("AchievementId")
+                    b.HasOne("SimpleMcRecords.Models.Advancement", "Advancement")
+                        .WithMany("PlayerAdvancements")
+                        .HasForeignKey("AdvancementId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SimpleMcRecords.Models.Player", "Player")
-                        .WithMany("PlayerAchievements")
+                        .WithMany("PlayerAdvancements")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Achievement");
+                    b.Navigation("Advancement");
 
                     b.Navigation("Player");
                 });
@@ -127,14 +141,19 @@ namespace SimpleMcRecords.Migrations
                     b.Navigation("Player");
                 });
 
-            modelBuilder.Entity("SimpleMcRecords.Models.Achievement", b =>
+            modelBuilder.Entity("SimpleMcRecords.Models.Advancement", b =>
                 {
-                    b.Navigation("PlayerAchievements");
+                    b.Navigation("PlayerAdvancements");
+                });
+
+            modelBuilder.Entity("SimpleMcRecords.Models.Category", b =>
+                {
+                    b.Navigation("Advancements");
                 });
 
             modelBuilder.Entity("SimpleMcRecords.Models.Player", b =>
                 {
-                    b.Navigation("PlayerAchievements");
+                    b.Navigation("PlayerAdvancements");
 
                     b.Navigation("Scores");
                 });

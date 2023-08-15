@@ -9,20 +9,20 @@ public class DataContext : DbContext
 
     public DbSet<Player> Players { get; set; } = null!;
     public DbSet<Score> Scores { get; set; } = null!;
-    public DbSet<Achievement> Achievements { get; set; } = null!;
-    public DbSet<PlayerAchievement> PlayerAchievements { get; set; } = null!;
+    public DbSet<Advancement> Advancements { get; set; } = null!;
+    public DbSet<PlayerAdvancement> PlayerAdvancements { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<PlayerAchievement>()
-            .HasKey(pa => new { pa.PlayerId, pa.AchievementId });
-        modelBuilder.Entity<PlayerAchievement>()
+        modelBuilder.Entity<PlayerAdvancement>()
+            .HasKey(pa => new { pa.PlayerId, pa.AdvancementId });
+        modelBuilder.Entity<PlayerAdvancement>()
             .HasOne(p => p.Player)
-            .WithMany(pa => pa.PlayerAchievements)
+            .WithMany(pa => pa.PlayerAdvancements)
             .HasForeignKey(p => p.PlayerId);
-        modelBuilder.Entity<PlayerAchievement>()
-            .HasOne(p => p.Achievement)
-            .WithMany(pa => pa.PlayerAchievements)
-            .HasForeignKey(a => a.AchievementId);
+        modelBuilder.Entity<PlayerAdvancement>()
+            .HasOne(p => p.Advancement)
+            .WithMany(pa => pa.PlayerAdvancements)
+            .HasForeignKey(a => a.AdvancementId);
     }
 }

@@ -12,22 +12,16 @@ namespace SimpleMcRecords.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Achievements",
+                name: "Category",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    ParentId = table.Column<long>(type: "INTEGER", nullable: true)
+                    Name = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Achievements", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Achievements_Achievements_ParentId",
-                        column: x => x.ParentId,
-                        principalTable: "Achievements",
-                        principalColumn: "Id");
+                    table.PrimaryKey("PK_Category", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -44,28 +38,22 @@ namespace SimpleMcRecords.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PlayerAchievements",
+                name: "Advancements",
                 columns: table => new
                 {
-                    PlayerId = table.Column<long>(type: "INTEGER", nullable: false),
-                    AchievementId = table.Column<long>(type: "INTEGER", nullable: false),
-                    Time = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    CategoryId = table.Column<long>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlayerAchievements", x => new { x.PlayerId, x.AchievementId });
+                    table.PrimaryKey("PK_Advancements", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PlayerAchievements_Achievements_AchievementId",
-                        column: x => x.AchievementId,
-                        principalTable: "Achievements",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PlayerAchievements_Players_PlayerId",
-                        column: x => x.PlayerId,
-                        principalTable: "Players",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Advancements_Category_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Category",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -88,15 +76,40 @@ namespace SimpleMcRecords.Migrations
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Achievements_ParentId",
-                table: "Achievements",
-                column: "ParentId");
+            migrationBuilder.CreateTable(
+                name: "PlayerAdvancements",
+                columns: table => new
+                {
+                    PlayerId = table.Column<long>(type: "INTEGER", nullable: false),
+                    AdvancementId = table.Column<long>(type: "INTEGER", nullable: false),
+                    Time = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlayerAdvancements", x => new { x.PlayerId, x.AdvancementId });
+                    table.ForeignKey(
+                        name: "FK_PlayerAdvancements_Advancements_AdvancementId",
+                        column: x => x.AdvancementId,
+                        principalTable: "Advancements",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PlayerAdvancements_Players_PlayerId",
+                        column: x => x.PlayerId,
+                        principalTable: "Players",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PlayerAchievements_AchievementId",
-                table: "PlayerAchievements",
-                column: "AchievementId");
+                name: "IX_Advancements_CategoryId",
+                table: "Advancements",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerAdvancements_AdvancementId",
+                table: "PlayerAdvancements",
+                column: "AdvancementId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Scores_PlayerId",
@@ -108,16 +121,19 @@ namespace SimpleMcRecords.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PlayerAchievements");
+                name: "PlayerAdvancements");
 
             migrationBuilder.DropTable(
                 name: "Scores");
 
             migrationBuilder.DropTable(
-                name: "Achievements");
+                name: "Advancements");
 
             migrationBuilder.DropTable(
                 name: "Players");
+
+            migrationBuilder.DropTable(
+                name: "Category");
         }
     }
 }

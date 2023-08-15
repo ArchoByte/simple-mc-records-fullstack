@@ -1,10 +1,10 @@
 namespace SimpleMcRecords.Models;
 
-public class PlayerAchievement
+public class PlayerAdvancement
 {
     public long PlayerId { get; set; }
-    public long AchievementId { get; set; }
+    public long AdvancementId { get; set; }
     public DateTime Time { get; set; }
     public Player? Player { get; set; }
-    public Achievement? Achievement { get; set; }
+    public Advancement? Advancement { get; set; }
 }
