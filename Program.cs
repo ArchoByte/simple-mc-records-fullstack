@@ -1,5 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using SimpleMcRecords.Data;
+using SimpleMcRecords.Dto;
+using SimpleMcRecords.Helper;
+using SimpleMcRecords.Interfaces;
+using SimpleMcRecords.Models;
+using SimpleMcRecords.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +13,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<DataContext>(opt =>
     opt.UseSqlite(builder.Configuration.GetConnectionString("Default")));
+// Add repositories
+builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
+builder.Services.AddScoped<IAdvancementRepository, AdvancementRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IScoreRepository, ScoreRepository>();
+// Add mappers
+builder.Services.AddScoped<IMapper<Player, PlayerDto>, PlayerMapper>();
+builder.Services.AddScoped<IMapper<Advancement, AdvancementDto>, AdvancementMapper>();
+builder.Services.AddScoped<IMapper<Category, CategoryDto>, CategoryMapper>();
+builder.Services.AddScoped<IMapper<Score, ScoreDto>, ScoreMapper>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -21,7 +36,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
