@@ -1,7 +1,8 @@
 namespace SimpleMcRecords.Dto;
 
-public class ScoreDto
+public class FullScoreDto
 {
     public string? Name { get; set; }
     public int? Value { get; set; }
+    public string? PlayerName { get; set; }
 }

@@ -12,7 +12,7 @@ namespace SimpleMcRecords.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Category",
+                name: "Categories",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
@@ -21,7 +21,7 @@ namespace SimpleMcRecords.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Category", x => x.Id);
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -50,9 +50,9 @@ namespace SimpleMcRecords.Migrations
                 {
                     table.PrimaryKey("PK_Advancements", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Advancements_Category_CategoryId",
+                        name: "FK_Advancements_Categories_CategoryId",
                         column: x => x.CategoryId,
-                        principalTable: "Category",
+                        principalTable: "Categories",
                         principalColumn: "Id");
                 });
 
@@ -133,7 +133,7 @@ namespace SimpleMcRecords.Migrations
                 name: "Players");
 
             migrationBuilder.DropTable(
-                name: "Category");
+                name: "Categories");
         }
     }
 }

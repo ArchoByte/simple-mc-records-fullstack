@@ -47,7 +47,7 @@ namespace SimpleMcRecords.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("SimpleMcRecords.Models.Player", b =>

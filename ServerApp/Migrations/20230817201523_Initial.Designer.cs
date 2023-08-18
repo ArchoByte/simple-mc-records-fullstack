@@ -11,7 +11,7 @@ using SimpleMcRecords.Data;
 namespace SimpleMcRecords.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230815211313_Initial")]
+    [Migration("20230817201523_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -50,7 +50,7 @@ namespace SimpleMcRecords.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("SimpleMcRecords.Models.Player", b =>

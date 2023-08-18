@@ -232,3 +232,5 @@ _Pvt_Extensions
 
 # Sqlite
 *.db
+*.db-shm
+*.db-wal
