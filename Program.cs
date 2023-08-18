@@ -23,6 +23,7 @@ builder.Services.AddScoped<IMapper<Player, PlayerDto>, PlayerMapper>();
 builder.Services.AddScoped<IMapper<Advancement, AdvancementDto>, AdvancementMapper>();
 builder.Services.AddScoped<IMapper<Category, CategoryDto>, CategoryMapper>();
 builder.Services.AddScoped<IMapper<Score, ScoreDto>, ScoreMapper>();
+builder.Services.AddScoped<IMapper<Score, FullScoreDto>, FullScoreMapper>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

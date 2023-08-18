@@ -15,9 +15,17 @@ public class CategoryRepository : ICategoryRepository
     
     public async Task<ICollection<Category>?> GetCategoriesAsync() => await _context.Categories.ToListAsync();
 
-    public async Task<Category?> GetCategoryAsync(long id) => await _context.Categories.Where(p => p.Id == id).FirstOrDefaultAsync();
+    public async Task<Category?> GetCategoryAsync(long id) => await _context.Categories.Where(c => c.Id == id).FirstOrDefaultAsync();
 
-    public async Task<Category?> GetCategoryByNameAsync(string name) => await _context.Categories.Where(p => p.Name == name).FirstOrDefaultAsync();
+    public async Task<Category?> GetCategoryByNameAsync(string name) => await _context.Categories.Where(c => c.Name == name).FirstOrDefaultAsync();
+
+    public async Task<long> GetIdByName(string name)
+    {
+        var category = await _context.Categories.Where(c => c.Name == name).FirstOrDefaultAsync();
+        if (category == null)
+            return 0;
+        return category.Id;
+    }
 
     public async Task<bool> PutCategoryAsync(Category category)
     {
@@ -55,7 +63,9 @@ public class CategoryRepository : ICategoryRepository
             {
                 var currentAdv = await _context.Advancements.Where(a => a.Id == advancement.Id).Include(pa => pa.PlayerAdvancements).FirstOrDefaultAsync();
 
-                if (currentAdv!.PlayerAdvancements != null)
+                if (currentAdv == null) throw new NullReferenceException();
+
+                if (currentAdv.PlayerAdvancements != null)
                     _context.PlayerAdvancements.RemoveRange(currentAdv.PlayerAdvancements);
                 _context.Advancements.Remove(currentAdv);
             }
@@ -67,7 +77,7 @@ public class CategoryRepository : ICategoryRepository
         return true;
     }
 
-    public bool CategoryExists(long id) => (_context.Categories?.Any(a => a.Id == id)).GetValueOrDefault();
+    public bool CategoryExists(long id) => (_context.Categories?.Any(c => c.Id == id)).GetValueOrDefault();
 
-    public bool CategoryExistsByName(string name) => (_context.Categories?.Any(a => a.Name == name)).GetValueOrDefault();
+    public bool CategoryExistsByName(string name) => (_context.Categories?.Any(c => c.Name == name)).GetValueOrDefault();
 }

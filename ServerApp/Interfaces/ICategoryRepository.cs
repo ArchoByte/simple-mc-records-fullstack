@@ -7,8 +7,9 @@ public interface ICategoryRepository
     Task<ICollection<Category>?> GetCategoriesAsync();
     Task<Category?> GetCategoryAsync(long id);
     Task<Category?> GetCategoryByNameAsync(string name);
-    Task<bool> PutCategoryAsync(Category Category);
-    Task PostCategoryAsync(Category Category);
+    Task<long> GetIdByName(string name); 
+    Task<bool> PutCategoryAsync(Category category);
+    Task PostCategoryAsync(Category category);
     Task<bool> DeleteCategoryAsync(long id);
     bool CategoryExists(long id);
     bool CategoryExistsByName(string name);

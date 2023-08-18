@@ -13,11 +13,19 @@ public class AdvancementRepository : IAdvancementRepository
         _context = context;
     }
 
-    public async Task<ICollection<Advancement>?> GetAdvancementsAsync() => await _context.Advancements.ToListAsync();
+    public async Task<ICollection<Advancement>?> GetAdvancementsAsync() => await _context.Advancements.Include(a => a.Category).ToListAsync();
 
-    public async Task<Advancement?> GetAdvancementAsync(long id) => await _context.Advancements.Where(p => p.Id == id).Include(c => c.Category).Include(pa => pa.PlayerAdvancements).FirstOrDefaultAsync();
+    public async Task<Advancement?> GetAdvancementAsync(long id) => await _context.Advancements.Where(a => a.Id == id).Include(a => a.Category).Include(a => a.PlayerAdvancements).FirstOrDefaultAsync();
 
-    public async Task<Advancement?> GetAdvancementByNameAsync(string name) => await _context.Advancements.Where(p => p.Name == name).Include(c => c.Category).Include(pa => pa.PlayerAdvancements).FirstOrDefaultAsync();
+    public async Task<Advancement?> GetAdvancementByNameAsync(string name) => await _context.Advancements.Where(a => a.Name == name).Include(a => a.Category).Include(a => a.PlayerAdvancements).FirstOrDefaultAsync();
+
+    public async Task<long> GetIdByName(string name)
+    {
+        var advancement = await _context.Advancements.Where(a => a.Name == name).FirstOrDefaultAsync();
+        if (advancement == null)
+            return 0;
+        return advancement.Id;
+    }
 
     public async Task<bool> PutAdvancementAsync(Advancement advancement)
     {

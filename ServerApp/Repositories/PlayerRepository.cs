@@ -12,12 +12,20 @@ public class PlayerRepository : IPlayerRepository
     {
         _context = context;
     }
-    
+
     public async Task<ICollection<Player>?> GetPlayersAsync() => await _context.Players.ToListAsync();
 
-    public async Task<Player?> GetPlayerAsync(long id) => await _context.Players.Where(p => p.Id == id).Include(s => s.Scores).Include(pa => pa.PlayerAdvancements).FirstOrDefaultAsync();
+    public async Task<Player?> GetPlayerAsync(long id) => await _context.Players.Where(p => p.Id == id).Include(p => p.Scores).Include(p => p.PlayerAdvancements).FirstOrDefaultAsync();
 
-    public async Task<Player?> GetPlayerByNameAsync(string name) => await _context.Players.Where(p => p.Name == name).Include(s => s.Scores).Include(pa => pa.PlayerAdvancements).FirstOrDefaultAsync();
+    public async Task<Player?> GetPlayerByNameAsync(string name) => await _context.Players.Where(p => p.Name == name).Include(p => p.Scores).Include(p => p.PlayerAdvancements).FirstOrDefaultAsync();
+
+    public async Task<long> GetIdByName(string name)
+    {
+        var player = await _context.Players.Where(p => p.Name == name).FirstOrDefaultAsync();
+        if (player == null)
+            return 0;
+        return player.Id;
+    }
 
     public async Task<bool> PutPlayerAsync(Player player)
     {
@@ -51,7 +59,7 @@ public class PlayerRepository : IPlayerRepository
 
         if (player.Scores != null)
             _context.Scores.RemoveRange(player.Scores);
-        
+
         if (player.PlayerAdvancements != null)
             _context.PlayerAdvancements.RemoveRange(player.PlayerAdvancements);
 
@@ -61,7 +69,40 @@ public class PlayerRepository : IPlayerRepository
         return true;
     }
 
-    public bool PlayerExists(long id) => (_context.Players?.Any(a => a.Id == id)).GetValueOrDefault();
+    public bool PlayerExists(long id) => (_context.Players?.Any(p => p.Id == id)).GetValueOrDefault();
 
-    public bool PlayerExistsByName(string name) => (_context.Players?.Any(a => a.Name == name)).GetValueOrDefault();
+    public bool PlayerExistsByName(string name) => (_context.Players?.Any(p => p.Name == name)).GetValueOrDefault();
+
+    public async Task AddAdvancementAsync(long playerId, long advancementId)
+    {
+        var player = await _context.Players.Where(p => p.Id == playerId).FirstOrDefaultAsync();
+        var advancement = await _context.Advancements.Where(p => p.Id == advancementId).FirstOrDefaultAsync();
+
+        if (player == null || advancement == null)
+            throw new NullReferenceException();
+
+        var pa = new PlayerAdvancement()
+        {
+            PlayerId = player.Id,
+            AdvancementId = advancement.Id,
+            Time = DateTime.UtcNow,
+            Player = player,
+            Advancement = advancement
+        };
+
+        _context.PlayerAdvancements.Add(pa);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task RemoveAdvancementAsync(long playerId, long advancementId)
+    {
+        var pa = await _context.PlayerAdvancements.Where(p => p.PlayerId == playerId).Where(p => p.AdvancementId == advancementId).FirstOrDefaultAsync();
+
+        if (pa == null) throw new NullReferenceException();
+
+        _context.PlayerAdvancements.Remove(pa!);
+        await _context.SaveChangesAsync();
+    }
+
+    public bool AdvancementExists(long playerId, long advancementId) => (_context.PlayerAdvancements?.Any(pa => pa.PlayerId == playerId && pa.AdvancementId == advancementId)).GetValueOrDefault();
 }
