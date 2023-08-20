@@ -1,0 +1,29 @@
+<div class="container">
+    <!-- Head section -->
+    <div class="row g-0 justify-content-center">
+        <div class="col-auto">
+            <app-player-head [texturePath]="texturePath" [size]="size"></app-player-head>
+        </div>
+    </div>
+    <!-- Body section -->
+    <div class="row g-0 justify-content-center">
+        <div class="col-auto">
+            <app-player-hand [texturePath]="texturePath" [size]="size"></app-player-hand>
+        </div>
+        <div class="col-auto">
+            <app-player-body [texturePath]="texturePath" [size]="size"></app-player-body>
+        </div>
+        <div class="col-auto flip-h">
+            <app-player-hand [texturePath]="texturePath" [size]="size"></app-player-hand>
+        </div>
+    </div>
+    <!-- Legs section -->
+    <div class="row g-0 justify-content-center">
+        <div class="col-auto">
+            <app-player-leg [texturePath]="texturePath" [size]="size"></app-player-leg>
+        </div>
+        <div class="col-auto flip-h">
+            <app-player-leg [texturePath]="texturePath" [size]="size"></app-player-leg>
+        </div>
+    </div>
+</div>

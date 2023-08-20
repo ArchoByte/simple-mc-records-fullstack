@@ -10,6 +10,11 @@ import { PlayerItemComponent } from './player-records/player-list/player-item/pl
 import { PlayerDetailsComponent } from './player-records/player-details/player-details.component';
 import { PlayerStartComponent } from './player-records/player-start/player-start.component';
 import { HeaderComponent } from './header/header.component';
+import { PlayerSkinComponent } from './shared/player-skin/player-skin.component';
+import { PlayerHeadComponent } from './shared/player-skin/player-head/player-head.component';
+import { PlayerHandComponent } from './shared/player-skin/player-hand/player-hand.component';
+import { PlayerBodyComponent } from './shared/player-skin/player-body/player-body.component';
+import { PlayerLegComponent } from './shared/player-skin/player-leg/player-leg.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +24,12 @@ import { HeaderComponent } from './header/header.component';
     PlayerItemComponent,
     PlayerDetailsComponent,
     PlayerStartComponent,
-    HeaderComponent
+    HeaderComponent,
+    PlayerSkinComponent,
+    PlayerHeadComponent,
+    PlayerHandComponent,
+    PlayerBodyComponent,
+    PlayerLegComponent
   ],
   imports: [
     BrowserModule,
