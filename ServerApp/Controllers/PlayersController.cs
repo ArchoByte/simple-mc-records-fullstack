@@ -105,10 +105,10 @@ public class PlayersController : ControllerBase
         if (player == null)
             return NotFound(new Error() { Message = "Player wasn't found" });
 
-        if (player.PlayerAdvancements == null)
-            return NotFound(new Error() { Message = "No completed advancements were found" });
-
         var advancementDtoList = new List<CompletedAdvancementDto>();
+
+        if (player.PlayerAdvancements == null)
+            return advancementDtoList;
 
         foreach (var playerAdvancement in player.PlayerAdvancements)
         {
@@ -120,8 +120,6 @@ public class PlayersController : ControllerBase
                 Time = playerAdvancement.Time
             });
         }
-        if (advancementDtoList.Count <= 0)
-            return NotFound(new Error() { Message = "No completed advancements were found" });
 
         return advancementDtoList;
     }
@@ -137,10 +135,10 @@ public class PlayersController : ControllerBase
         if (player == null)
             return NotFound(new Error() { Message = "Player wasn't found" });
 
-        if (player.Scores == null)
-            return NotFound(new Error() { Message = "No scores were found" });
-
         var scoreDtoList = new List<ScoreDto>();
+
+        if (player.Scores == null)
+            return scoreDtoList;
 
         foreach (var score in player.Scores)
             scoreDtoList.Add(new ScoreDto()
@@ -148,8 +146,6 @@ public class PlayersController : ControllerBase
                 Name = score.Name,
                 Value = score.Value
             });
-        if (scoreDtoList.Count <= 0)
-            return NotFound(new Error() { Message = "No scores were found" });
 
         return scoreDtoList;
     }
