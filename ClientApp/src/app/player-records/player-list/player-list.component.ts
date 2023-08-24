@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { Player } from 'src/app/shared/player.model';
+import { Player } from 'src/app/shared/models/player.model';
 import { PlayersService } from 'src/app/shared/players.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { PlayersService } from 'src/app/shared/players.service';
   templateUrl: './player-list.component.html',
   styleUrls: ['./player-list.component.scss']
 })
-export class PlayerListComponent {
+export class PlayerListComponent implements OnInit, OnDestroy {
   players: Player[];
   subscription: Subscription;
 

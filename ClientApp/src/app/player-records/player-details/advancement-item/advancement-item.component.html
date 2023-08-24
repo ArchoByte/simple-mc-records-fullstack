@@ -1,0 +1,10 @@
+<div class="list-group-item align-items-center">
+    <div class="row align-items-center">
+        <div class="col">
+            <h4 class="list-group-item-heading remove-margin">{{ advancement.name | underscoreToSpace | capitalizeFirst}}</h4>
+        </div>
+        <div class="col-auto">
+            <app-advancement-icon [category]="advancement.category"></app-advancement-icon>
+        </div>
+    </div>
+</div>

@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-player-records',
-  templateUrl: './player-records.component.html',
-  styleUrls: ['./player-records.component.scss']
+  templateUrl: './player-records.component.html'
 })
 export class PlayerRecordsComponent { }

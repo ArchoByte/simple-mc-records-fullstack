@@ -1,0 +1,13 @@
+<a class="list-group-item clearfix"
+    routerLink="."
+    [queryParams]="{ category: category }"
+    routerLinkActive="active">
+    <div class="row align-items-center">
+        <div class="col">
+            <h4 class="list-group-item-heading">{{ category | capitalizeFirst}}</h4>
+        </div>
+        <div class="col-auto">
+            <app-advancement-icon [category]="category"></app-advancement-icon>
+        </div>
+    </div>
+</a>

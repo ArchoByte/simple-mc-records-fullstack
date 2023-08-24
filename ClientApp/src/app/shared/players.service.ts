@@ -1,42 +1,25 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { Player } from './player.model';
+import { Player } from './models/player.model';
+import { DataStorageService } from './data-storage.service';
 
 @Injectable({providedIn: 'root'})
 export class PlayersService {
   playersChanged = new Subject<Player[]>();
 
-  private players: Player[] = [
-    new Player(
-      'Dream',
-      'http://textures.minecraft.net/texture/e33f240cbeeb6d165d3a1182848a3d07859fe650734e7a568ef09a36fffe0efc',
-      [],
-      []
-    ),
-    new Player(
-      'GeorgeNotFound',
-      'http://textures.minecraft.net/texture/2d7552678058720f8920bcee682ac4e7475e41e2155ae6700b2a58389f5b64f6',
-      [],
-      []
-    ),
-    new Player(
-      'Sapnap',
-      'http://textures.minecraft.net/texture/bf6a0be52a25884fad8c2a28e9e223d98544eacf91a55b52fc4f22a11d657db1',
-      [],
-      []
-    )
-  ];
+  private players: Player[] = [];
 
   // TODO: implement DataStorageService
-  // constructor(private dataStorageService: DataStorageService) {
-  //   this.dataStorageService.fetchPlayers().subscribe(players => {
-  //     this.setPlayers(players);
-  //   });
-  // }
-
-  constructor() {
-    this.playersChanged.next(this.players.slice());
+  constructor(private dataStorageService: DataStorageService) {
+    this.dataStorageService.fetchPlayers().subscribe(players => {
+      this.setPlayers(players);
+      players.forEach(player => {
+        this.dataStorageService.loadTexture(player.name).subscribe(texture => {
+          player.texturePath = texture;
+        });
+      });
+    });
   }
 
   setPlayers(players: Player[]) {
@@ -49,6 +32,30 @@ export class PlayersService {
   }
 
   getPlayer(name: string) {
-    return this.players.find((element) => element.name == name);
+    return this.players.find((element) => element.name === name);
+  }
+
+  loadPlayer(name: string) {
+    let player = this.getPlayer(name);
+    if (!player)
+      return;
+
+    if (!player.scores || player.scores.length <= 0) {
+      this.dataStorageService.loadScores(player.name).subscribe(scores => {
+        if (!player)
+          return;
+        player.scores = scores;
+        this.playersChanged.next(this.players.slice());
+      });
+    }
+
+    if (!player.advancements || player.advancements.length <= 0) {
+      this.dataStorageService.loadAdvancements(player.name).subscribe(advancements => {
+        if (!player)
+          return;
+        player.advancements = advancements;
+        this.playersChanged.next(this.players.slice());
+      });
+    }
   }
 }
